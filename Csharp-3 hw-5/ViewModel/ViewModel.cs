@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Text;
 using System.Windows.Input;
 using System.Diagnostics;
+using System.Threading;
+using System.Threading.Channels;
 
 namespace Csharp_3_hw_5.ViewModel
 {
@@ -111,6 +113,7 @@ namespace Csharp_3_hw_5.ViewModel
 
         Model.EvenNum evenNum = new Model.EvenNum();
         int evenCount = 0;
+        string evenCountTime = "none";
         public int EvenCount
         {
             get
@@ -127,7 +130,6 @@ namespace Csharp_3_hw_5.ViewModel
                 }
             }
         }
-        string evenCountTime = "none";
         public string EvenCountTime
         {
             get
@@ -148,6 +150,7 @@ namespace Csharp_3_hw_5.ViewModel
 
         Model.MultipleOf3and5 multipleNum = new Model.MultipleOf3and5();
         int multipleCount = 0;
+        string multipleCountTime = "none";
         public int MultipleCount
         {
             get
@@ -164,7 +167,6 @@ namespace Csharp_3_hw_5.ViewModel
                 }
             }
         }
-        string multipleCountTime = "none";
         public string MultipleCountTime
         {
             get
@@ -184,6 +186,7 @@ namespace Csharp_3_hw_5.ViewModel
 
         Model.SimpleNum simpleNum = new Model.SimpleNum();
         int simpleCount = 0;
+        string simpleCountTime = "none";
         public int SimpleCount
         {
             get
@@ -200,7 +203,6 @@ namespace Csharp_3_hw_5.ViewModel
                 }
             }
         }
-        string simpleCountTime = "none";
         public string SimpleCountTime
         {
             get
@@ -220,6 +222,7 @@ namespace Csharp_3_hw_5.ViewModel
         
         Model.NumPow2 numPow = new Model.NumPow2();
         int numPowCount = 0;
+        string numPowCountTime = "none";
         public int NumPowCount
         {
             get
@@ -236,7 +239,6 @@ namespace Csharp_3_hw_5.ViewModel
                 }
             }
         }
-        string numPowCountTime = "none";
         public string NumPowCountTime
         {
             get
@@ -254,46 +256,52 @@ namespace Csharp_3_hw_5.ViewModel
             }
         }
 
+        private static object lockObject = new object();
+        
         private void _StartCalc(object obj)
         {
             int[] a = Model.MainLogic.ReadFile(FilenameText);
 
-            if (_chkEvenNum)
-            {
-                evenNum._Calc(a);
-                EvenCount = evenNum.Count;
-                EvenCountTime = evenNum.CalcTime;
-                Debug.WriteLine("Work to EvenNum complete.");
-            }
+            lockObject = a;
 
-            if (_chkMultipleOf3and5)
-            {
-                multipleNum._Calc(a);
-                MultipleCount = multipleNum.Count;
-                MultipleCountTime = multipleNum.CalcTime;
-                Debug.WriteLine("Work to Multiple3and5 complete.");
-            }
 
-            if (_chkSimpleNum)
+            lock (lockObject)
             {
-                simpleNum._Calc(a);
-                SimpleCount = simpleNum.Count;
-                SimpleCountTime = simpleNum.CalcTime;
-                Debug.WriteLine("Work to SimpleNum complete.");
-            }
+                if (_chkEvenNum)
+                {
+                    evenNum._Calc(a);
+                    EvenCount = evenNum.Count;
+                    EvenCountTime = evenNum.CalcTime;
+                    Debug.WriteLine("Work to EvenNum complete.");
+                }
 
-            if (_chkNumPow2)
-            {
-                numPow._Calc(a);
-                NumPowCount = numPow.Count;
-                NumPowCountTime = numPow.CalcTime;
-                Debug.WriteLine("Work to NumPow2 complete.");
+                if (_chkMultipleOf3and5)
+                {
+                    multipleNum._Calc(a);
+                    MultipleCount = multipleNum.Count;
+                    MultipleCountTime = multipleNum.CalcTime;
+                    Debug.WriteLine("Work to Multiple3and5 complete.");
+                }
+
+                if (_chkSimpleNum)
+                {
+                    simpleNum._Calc(a);
+                    SimpleCount = simpleNum.Count;
+                    SimpleCountTime = simpleNum.CalcTime;
+                    Debug.WriteLine("Work to SimpleNum complete.");
+                }
+
+                if (_chkNumPow2)
+                {
+                    numPow._Calc(a);
+                    NumPowCount = numPow.Count;
+                    NumPowCountTime = numPow.CalcTime;
+                    Debug.WriteLine("Work to NumPow2 complete.");
+                }
             }
+           
 
             Debug.WriteLine("All works has been ended.");
         }
-
-        
-
     }
 }
