@@ -9,65 +9,66 @@ namespace Csharp_3_hw_5.Model
     {
         public int Count { get; private set; } = 0;
         public string CalcTime { get; private set; }
-        private static object lockObject = new object();
 
-        //public void Calc(object a)
-        //{
-        //    int count = 0;
-        //    int[] b = (int[])((int[])a);
-
-        //    Stopwatch sw = new Stopwatch();
-        //    sw.Start();
-        //    this.CalcTime = "Вычисление...";
-
-        //    for (int i = 0; i < b.Length; i++)
-        //    {
-        //        if (SimpleNumCheck(b[i]))
-        //        {
-        //            count++;
-        //        }
-        //    }
-        //    this.Count = count;
-        //    sw.Stop();
-        //    TimeSpan ts = sw.Elapsed;
-        //    this.CalcTime = ts.ToString();
-        //    Debug.WriteLine("Time: " + CalcTime);
-        //}
-
-        public void Calc(object a) //with lockObject
+        public void Calc(object a)
         {
             int count = 0;
             int[] b = (int[])((int[])a);
-            lockObject = b;
 
-            lock (lockObject)
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            this.CalcTime = "Вычисление...";
+
+            for (int i = 0; i < b.Length; i++)
             {
-                Stopwatch sw = new Stopwatch();
-                sw.Start();
-                this.CalcTime = "Вычисление...";
-
-                for (int i = 0; i < b.Length; i++)
+                if (SimpleNumCheck(b[i]))
                 {
-                    if (SimpleNumCheck(b[i]))
-                    {
-                        count++;
-                    }
+                    count++;
                 }
-                this.Count = count;
-                sw.Stop();
-                TimeSpan ts = sw.Elapsed;
-                this.CalcTime = ts.ToString();
-                Debug.WriteLine("Time: " + CalcTime);
             }
-            
+            this.Count = count;
+            sw.Stop();
+            TimeSpan ts = sw.Elapsed;
+            this.CalcTime = ts.ToString();
+            Debug.WriteLine("SimpleNum nums: " + Count);
+            Debug.WriteLine("SimpleNum Time: " + CalcTime);
         }
+
+        //private static object lockObject = new object();
+        //public void Calc(object a) //with lockObject
+        //{
+        //    int count = 0;
+        //    int[] b = (int[])((int[])a);
+        //    lockObject = b;
+
+        //    lock (lockObject)
+        //    {
+        //        Stopwatch sw = new Stopwatch();
+        //        sw.Start();
+        //        this.CalcTime = "Вычисление...";
+
+        //        for (int i = 0; i < b.Length; i++)
+        //        {
+        //            if (SimpleNumCheck(b[i]))
+        //            {
+        //                count++;
+        //            }
+        //        }
+        //        this.Count = count;
+        //        sw.Stop();
+        //        TimeSpan ts = sw.Elapsed;
+        //        this.CalcTime = ts.ToString();
+        //        Debug.WriteLine("Time: " + CalcTime);
+        //    }
+
+        //}
 
         public static bool SimpleNumCheck(int n)
         {
             bool result = true;
             if (n > 1)
             {
-                for (int i = 2; i < n; i++)
+                for (int i = 2; i < (n / 2); i++)
                 {
                     if (n % i == 0)
                     {

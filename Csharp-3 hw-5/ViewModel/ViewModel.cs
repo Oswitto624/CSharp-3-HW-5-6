@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Input;
 using System.Diagnostics;
 using System.Threading;
-using System.Threading.Channels;
+using System.Threading.Tasks;
 
 namespace Csharp_3_hw_5.ViewModel
 {
@@ -126,7 +126,6 @@ namespace Csharp_3_hw_5.ViewModel
                 {
                     evenCount = evenNum.Count;
                     PropertyChanged.Invoke(this, new PropertyChangedEventArgs("evenCount"));
-                    Debug.WriteLine("Work for EvenNum. Количество чисел: " + evenCount);
                 }
             }
         }
@@ -142,7 +141,6 @@ namespace Csharp_3_hw_5.ViewModel
                 {
                     evenCountTime = evenNum.CalcTime;
                     PropertyChanged.Invoke(this, new PropertyChangedEventArgs("evenCountTime"));
-                    Debug.WriteLine("Work for EvenNum. Время выполнения: " + evenCountTime);
                 }
                 
             }
@@ -163,7 +161,6 @@ namespace Csharp_3_hw_5.ViewModel
                 {
                     multipleCount = multipleNum.Count;
                     PropertyChanged.Invoke(this, new PropertyChangedEventArgs("multipleCount"));
-                    Debug.WriteLine("Work for multipleCount. Количество чисел: " + multipleCount);
                 }
             }
         }
@@ -175,11 +172,10 @@ namespace Csharp_3_hw_5.ViewModel
             }
             set
             {
-                if (multipleCountTime != simpleNum.CalcTime)
+                if (multipleCountTime != multipleNum.CalcTime)
                 {
                     multipleCountTime = multipleNum.CalcTime;
                     PropertyChanged.Invoke(this, new PropertyChangedEventArgs("multipleCountTime"));
-                    Debug.WriteLine("Work for multipleCountTime. Время выполнения: " + multipleCountTime);
                 }
             }
         }
@@ -199,7 +195,6 @@ namespace Csharp_3_hw_5.ViewModel
                 {
                     simpleCount = simpleNum.Count;
                     PropertyChanged.Invoke(this, new PropertyChangedEventArgs("SimpleCount"));
-                    Debug.WriteLine("Work for SimpleCount. Количество чисел: " + simpleCount);
                 }
             }
         }
@@ -215,7 +210,6 @@ namespace Csharp_3_hw_5.ViewModel
                 {
                     simpleCountTime = simpleNum.CalcTime;
                     PropertyChanged.Invoke(this, new PropertyChangedEventArgs("simpleCountTime"));
-                    Debug.WriteLine("Work for simpleCountTime. Время выполнения: " + simpleCountTime);
                 }
             }
         }
@@ -235,7 +229,6 @@ namespace Csharp_3_hw_5.ViewModel
                 {
                     numPowCount = numPow.Count;
                     PropertyChanged.Invoke(this, new PropertyChangedEventArgs("numPowCount"));
-                    Debug.WriteLine("Work for numPowCount. Количество чисел: " + numPowCount);
                 }
             }
         }
@@ -251,48 +244,63 @@ namespace Csharp_3_hw_5.ViewModel
                 {
                     numPowCountTime = numPow.CalcTime;
                     PropertyChanged.Invoke(this, new PropertyChangedEventArgs("numPowCountTime"));
-                    Debug.WriteLine("Work for numPowCountTime. Время выполнения: " + numPowCountTime);
                 }
             }
         }
 
         private void _StartCalc(object obj)
         {
-            int[] a = Model.MainLogic.ReadFile(FilenameText);
+            Parallel.Invoke(EvenNumCalcMethod, MultipleNumCalcMethod, SimpleNumCalcMethod, PowNumCalcMethod);
 
+            //Debug.WriteLine("All works has been ended.");
+        }
+
+        private void EvenNumCalcMethod()
+        {
             if (_chkEvenNum)
             {
-                evenNum._Calc(a);
+                int[] a = Model.MainLogic.ReadFile(FilenameText);
+                evenNum.Calc(a);
                 EvenCount = evenNum.Count;
                 EvenCountTime = evenNum.CalcTime;
-                Debug.WriteLine("Work to EvenNum complete.");
+                //Debug.WriteLine("Work to EvenNum complete.");
             }
+        }
 
+        private void MultipleNumCalcMethod()
+        {
             if (_chkMultipleOf3and5)
             {
-                multipleNum._Calc(a);
+                int[] a = Model.MainLogic.ReadFile(FilenameText);
+                multipleNum.Calc(a);
                 MultipleCount = multipleNum.Count;
                 MultipleCountTime = multipleNum.CalcTime;
-                Debug.WriteLine("Work to Multiple3and5 complete.");
+                //Debug.WriteLine("Work to Multiple3and5 complete.");
             }
+        }
 
+        private void SimpleNumCalcMethod()
+        {
             if (_chkSimpleNum)
             {
-                simpleNum._Calc(a);
+                int[] a = Model.MainLogic.ReadFile(FilenameText);
+                simpleNum.Calc(a);
                 SimpleCount = simpleNum.Count;
                 SimpleCountTime = simpleNum.CalcTime;
-                Debug.WriteLine("Work to SimpleNum complete.");
+                //Debug.WriteLine("Work to SimpleNum complete.");
             }
+        }
 
+        private void PowNumCalcMethod()
+        {
             if (_chkNumPow2)
             {
-                numPow._Calc(a);
+                int[] a = Model.MainLogic.ReadFile(FilenameText);
+                numPow.Calc(a);
                 NumPowCount = numPow.Count;
                 NumPowCountTime = numPow.CalcTime;
-                Debug.WriteLine("Work to NumPow2 complete.");
+                //Debug.WriteLine("Work to NumPow2 complete.");
             }
-
-            Debug.WriteLine("All works has been ended.");
         }
     }
 }

@@ -9,44 +9,45 @@ namespace Csharp_3_hw_5.Model
     {
         public int Count { get; private set; } = 0;
         public string CalcTime { get; private set; }
-        private static object lockObject = new object();
 
-        //public void Calc(object a)
-        //{
-        //    int count = 0;
-        //    int[] b = (int[])((int[])a);
-        //    Stopwatch sw = new Stopwatch();
-        //    sw.Start();
-        //    this.CalcTime = "Вычисление...";
-
-        //    for (int i = 0; i < b.Length; i++) if (b[i] % 3 == 0 && b[i] % 5 == 0) count++;
-        //    this.Count = count;
-        //    sw.Stop();
-        //    TimeSpan ts = sw.Elapsed;
-        //    this.CalcTime = ts.ToString();
-        //    Debug.WriteLine("Time: " + CalcTime);
-        //}
-
-        public void Calc(object a)  //with lockObject
+        public void Calc(object a)
         {
             int count = 0;
             int[] b = (int[])((int[])a);
-            lockObject = b;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            this.CalcTime = "Вычисление...";
 
-            lock (lockObject)
-            {
-                Stopwatch sw = new Stopwatch();
-                sw.Start();
-                this.CalcTime = "Вычисление...";
-
-                for (int i = 0; i < b.Length; i++) if (b[i] % 3 == 0 && b[i] % 5 == 0) count++;
-                this.Count = count;
-                sw.Stop();
-                TimeSpan ts = sw.Elapsed;
-                this.CalcTime = ts.ToString();
-                Debug.WriteLine("Time: " + CalcTime);
-            }           
+            for (int i = 0; i < b.Length; i++) if (b[i] % 3 == 0 && b[i] % 5 == 0) count++;
+            this.Count = count;
+            sw.Stop();
+            TimeSpan ts = sw.Elapsed;
+            this.CalcTime = ts.ToString();
+            Debug.WriteLine("Multiple3and5 nums: " + Count);
+            Debug.WriteLine("Multiple3and5 Time: " + CalcTime);
         }
+
+        //private static object lockObject = new object();
+        //public void Calc(object a)  //with lockObject
+        //{
+        //    int count = 0;
+        //    int[] b = (int[])((int[])a);
+        //    lockObject = b;
+
+        //    lock (lockObject)
+        //    {
+        //        Stopwatch sw = new Stopwatch();
+        //        sw.Start();
+        //        this.CalcTime = "Вычисление...";
+
+        //        for (int i = 0; i < b.Length; i++) if (b[i] % 3 == 0 && b[i] % 5 == 0) count++;
+        //        this.Count = count;
+        //        sw.Stop();
+        //        TimeSpan ts = sw.Elapsed;
+        //        this.CalcTime = ts.ToString();
+        //        Debug.WriteLine("Time: " + CalcTime);
+        //    }           
+        //}
 
         public void _Calc(object a)
         {
