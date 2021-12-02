@@ -250,16 +250,22 @@ namespace Csharp_3_hw_5.ViewModel
 
         private void _StartCalc(object obj)
         {
-            Parallel.Invoke(EvenNumCalcMethod, MultipleNumCalcMethod, SimpleNumCalcMethod, PowNumCalcMethod);
+            int[] a = Model.MainLogic.ReadFile(FilenameText);
 
-            //Debug.WriteLine("All works has been ended.");
+            Task[] tasksArr = new Task[4];
+            tasksArr[0] = Task.Factory.StartNew(() => EvenNumCalcMethod(a));
+            tasksArr[1] = Task.Factory.StartNew(() => MultipleNumCalcMethod(a));
+            tasksArr[2] = Task.Factory.StartNew(() => SimpleNumCalcMethod(a));
+            tasksArr[3] = Task.Factory.StartNew(() => PowNumCalcMethod(a));
+            Task.WaitAll(tasksArr);
+            Debug.WriteLine("All works has been ended.");
+            
         }
 
-        private void EvenNumCalcMethod()
+        private void EvenNumCalcMethod(object a)
         {
             if (_chkEvenNum)
             {
-                int[] a = Model.MainLogic.ReadFile(FilenameText);
                 evenNum.Calc(a);
                 EvenCount = evenNum.Count;
                 EvenCountTime = evenNum.CalcTime;
@@ -267,11 +273,10 @@ namespace Csharp_3_hw_5.ViewModel
             }
         }
 
-        private void MultipleNumCalcMethod()
+        private void MultipleNumCalcMethod(object a)
         {
             if (_chkMultipleOf3and5)
             {
-                int[] a = Model.MainLogic.ReadFile(FilenameText);
                 multipleNum.Calc(a);
                 MultipleCount = multipleNum.Count;
                 MultipleCountTime = multipleNum.CalcTime;
@@ -279,11 +284,10 @@ namespace Csharp_3_hw_5.ViewModel
             }
         }
 
-        private void SimpleNumCalcMethod()
+        private void SimpleNumCalcMethod(object a)
         {
             if (_chkSimpleNum)
             {
-                int[] a = Model.MainLogic.ReadFile(FilenameText);
                 simpleNum.Calc(a);
                 SimpleCount = simpleNum.Count;
                 SimpleCountTime = simpleNum.CalcTime;
@@ -291,11 +295,10 @@ namespace Csharp_3_hw_5.ViewModel
             }
         }
 
-        private void PowNumCalcMethod()
+        private void PowNumCalcMethod(object a)
         {
             if (_chkNumPow2)
             {
-                int[] a = Model.MainLogic.ReadFile(FilenameText);
                 numPow.Calc(a);
                 NumPowCount = numPow.Count;
                 NumPowCountTime = numPow.CalcTime;
