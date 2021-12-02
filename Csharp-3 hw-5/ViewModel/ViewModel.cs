@@ -256,50 +256,41 @@ namespace Csharp_3_hw_5.ViewModel
             }
         }
 
-        private static object lockObject = new object();
-        
         private void _StartCalc(object obj)
         {
             int[] a = Model.MainLogic.ReadFile(FilenameText);
 
-            lockObject = a;
-
-
-            lock (lockObject)
+            if (_chkEvenNum)
             {
-                if (_chkEvenNum)
-                {
-                    evenNum._Calc(a);
-                    EvenCount = evenNum.Count;
-                    EvenCountTime = evenNum.CalcTime;
-                    Debug.WriteLine("Work to EvenNum complete.");
-                }
-
-                if (_chkMultipleOf3and5)
-                {
-                    multipleNum._Calc(a);
-                    MultipleCount = multipleNum.Count;
-                    MultipleCountTime = multipleNum.CalcTime;
-                    Debug.WriteLine("Work to Multiple3and5 complete.");
-                }
-
-                if (_chkSimpleNum)
-                {
-                    simpleNum._Calc(a);
-                    SimpleCount = simpleNum.Count;
-                    SimpleCountTime = simpleNum.CalcTime;
-                    Debug.WriteLine("Work to SimpleNum complete.");
-                }
-
-                if (_chkNumPow2)
-                {
-                    numPow._Calc(a);
-                    NumPowCount = numPow.Count;
-                    NumPowCountTime = numPow.CalcTime;
-                    Debug.WriteLine("Work to NumPow2 complete.");
-                }
+                evenNum._Calc(a);
+                EvenCount = evenNum.Count;
+                EvenCountTime = evenNum.CalcTime;
+                Debug.WriteLine("Work to EvenNum complete.");
             }
-           
+
+            if (_chkMultipleOf3and5)
+            {
+                multipleNum._Calc(a);
+                MultipleCount = multipleNum.Count;
+                MultipleCountTime = multipleNum.CalcTime;
+                Debug.WriteLine("Work to Multiple3and5 complete.");
+            }
+
+            if (_chkSimpleNum)
+            {
+                simpleNum._Calc(a);
+                SimpleCount = simpleNum.Count;
+                SimpleCountTime = simpleNum.CalcTime;
+                Debug.WriteLine("Work to SimpleNum complete.");
+            }
+
+            if (_chkNumPow2)
+            {
+                numPow._Calc(a);
+                NumPowCount = numPow.Count;
+                NumPowCountTime = numPow.CalcTime;
+                Debug.WriteLine("Work to NumPow2 complete.");
+            }
 
             Debug.WriteLine("All works has been ended.");
         }
