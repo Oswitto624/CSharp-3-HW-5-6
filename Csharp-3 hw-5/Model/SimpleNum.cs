@@ -14,10 +14,10 @@ namespace Csharp_3_hw_5.Model
         {
             int count = 0;
             int[] b = (int[])((int[])a);
+            this.CalcTime = "Вычисление...";
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            this.CalcTime = "Вычисление...";
 
             for (int i = 0; i < b.Length; i++)
             {

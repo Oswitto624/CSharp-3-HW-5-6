@@ -142,7 +142,7 @@ namespace Csharp_3_hw_5.ViewModel
                     evenCountTime = evenNum.CalcTime;
                     PropertyChanged.Invoke(this, new PropertyChangedEventArgs("evenCountTime"));
                 }
-                
+
             }
         }
 
@@ -213,7 +213,7 @@ namespace Csharp_3_hw_5.ViewModel
                 }
             }
         }
-        
+
         Model.NumPow2 numPow = new Model.NumPow2();
         int numPowCount = 0;
         string numPowCountTime = "none";
@@ -248,24 +248,30 @@ namespace Csharp_3_hw_5.ViewModel
             }
         }
 
-        private void _StartCalc(object obj)
+        private async void _StartCalc(object obj)
         {
-            int[] a = Model.MainLogic.ReadFile(FilenameText);
+            Task[] tasks = new Task[4];
+            tasks[0] = Task.Run(EvenNumCalcMethod);
+            tasks[1] = Task.Run(MultipleNumCalcMethod);
+            tasks[2] = Task.Run(SimpleNumCalcMethod);
+            tasks[3] = Task.Run(PowNumCalcMethod);
 
-            Task[] tasksArr = new Task[4];
-            tasksArr[0] = Task.Factory.StartNew(() => EvenNumCalcMethod(a));
-            tasksArr[1] = Task.Factory.StartNew(() => MultipleNumCalcMethod(a));
-            tasksArr[2] = Task.Factory.StartNew(() => SimpleNumCalcMethod(a));
-            tasksArr[3] = Task.Factory.StartNew(() => PowNumCalcMethod(a));
-            Task.WaitAll(tasksArr);
+            await Task.WhenAll(tasks);
+
+            //await EvenNumCalcMethod(a);
+            //await MultipleNumCalcMethod(a);
+            //await SimpleNumCalcMethod(a);
+            //await PowNumCalcMethod(a);
             Debug.WriteLine("All works has been ended.");
-            
+
         }
 
-        private void EvenNumCalcMethod(object a)
+        private void EvenNumCalcMethod()
         {
             if (_chkEvenNum)
             {
+                int[] a = Model.MainLogic.ReadFile(FilenameText);
+
                 evenNum.Calc(a);
                 EvenCount = evenNum.Count;
                 EvenCountTime = evenNum.CalcTime;
@@ -273,10 +279,12 @@ namespace Csharp_3_hw_5.ViewModel
             }
         }
 
-        private void MultipleNumCalcMethod(object a)
+        private void MultipleNumCalcMethod()
         {
             if (_chkMultipleOf3and5)
             {
+                int[] a = Model.MainLogic.ReadFile(FilenameText);
+
                 multipleNum.Calc(a);
                 MultipleCount = multipleNum.Count;
                 MultipleCountTime = multipleNum.CalcTime;
@@ -284,10 +292,12 @@ namespace Csharp_3_hw_5.ViewModel
             }
         }
 
-        private void SimpleNumCalcMethod(object a)
+        private void SimpleNumCalcMethod()
         {
             if (_chkSimpleNum)
             {
+                int[] a = Model.MainLogic.ReadFile(FilenameText);
+
                 simpleNum.Calc(a);
                 SimpleCount = simpleNum.Count;
                 SimpleCountTime = simpleNum.CalcTime;
@@ -295,10 +305,12 @@ namespace Csharp_3_hw_5.ViewModel
             }
         }
 
-        private void PowNumCalcMethod(object a)
+        private void PowNumCalcMethod()
         {
             if (_chkNumPow2)
             {
+                int[] a = Model.MainLogic.ReadFile(FilenameText);
+
                 numPow.Calc(a);
                 NumPowCount = numPow.Count;
                 NumPowCountTime = numPow.CalcTime;
